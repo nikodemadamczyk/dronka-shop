@@ -25,4 +25,27 @@ public class Shop {
 	public Index getItemsIndex() {
 		return itemsIndex;
 	}
+
+	public class Book extends Item {
+		private int pageCount;
+		private boolean hardcover;
+
+		// Getters and setters
+		public int getPageCount() {
+			return pageCount;
+		}
+
+		public void setPageCount(int pageCount) {
+			this.pageCount = pageCount;
+		}
+
+		public boolean isHardcover() {
+			return hardcover;
+		}
+
+		public void setHardcover(boolean hardcover) {
+			this.hardcover = hardcover;
+		}
+	}
+
 }
