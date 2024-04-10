@@ -1,6 +1,6 @@
 package pl.edu.agh.dronka.shop.model;
 
-enum MusicGenre {
+public enum MusicGenre {
     ROCK,
     POP,
     JAZZ,
