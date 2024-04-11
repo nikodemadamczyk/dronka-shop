@@ -2,7 +2,7 @@ package pl.edu.agh.dronka.shop.model;
 
 public class MusicItem extends Item {
     private MusicGenre genre;
-    private boolean includesVideo;
+    boolean includesVideo;
 
     public MusicItem(String name, Category category, int price, int quantity, MusicGenre genre, boolean includesVideo) {
         super(name, category, price, quantity);

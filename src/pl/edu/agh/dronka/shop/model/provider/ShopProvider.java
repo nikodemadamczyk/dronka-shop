@@ -1,14 +1,12 @@
 package pl.edu.agh.dronka.shop.model.provider;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import pl.edu.agh.dronka.shop.model.Category;
-import pl.edu.agh.dronka.shop.model.Index;
-import pl.edu.agh.dronka.shop.model.Item;
-import pl.edu.agh.dronka.shop.model.Shop;
-import pl.edu.agh.dronka.shop.model.User;
+import pl.edu.agh.dronka.shop.model.*;
 
 public class ShopProvider {
 
@@ -68,25 +66,46 @@ public class ShopProvider {
 			List<String[]> data = reader.getData();
 
 			for (String[] dataLine : data) {
-	
-				String name = reader.getValue(dataLine,"Nazwa");
+				String name = reader.getValue(dataLine, "Nazwa");
 				int price = Integer.parseInt(reader.getValue(dataLine, "Cena"));
-				int quantity = Integer.parseInt(reader.getValue(dataLine,
-						"Ilość"));
+				int quantity = Integer.parseInt(reader.getValue(dataLine, "Ilość"));
+				boolean isPolish = Boolean.parseBoolean(reader.getValue(dataLine, "Tanie bo polskie"));
+				boolean isSecondhand = Boolean.parseBoolean(reader.getValue(dataLine, "Używany"));
 
-				boolean isPolish = Boolean.parseBoolean(reader.getValue(
-						dataLine, "Tanie bo polskie"));
-				boolean isSecondhand = Boolean.parseBoolean(reader.getValue(
-						dataLine, "Używany"));
-				Item item = new Item(name, category, price, quantity);
+				Item item = null;
+				switch (category) {
+					case BOOKS:
+						int pagesNumber = Integer.parseInt(reader.getValue(dataLine, "Liczba stron"));
+						boolean hardCover = Boolean.parseBoolean(reader.getValue(dataLine, "Twarda oprawa"));
+						item = new BookItem(name, category, price, quantity, pagesNumber, hardCover);
+						break;
+					case ELECTRONICS:
+						boolean mobile = Boolean.parseBoolean(reader.getValue(dataLine, "Mobilny"));
+						boolean warranty = Boolean.parseBoolean(reader.getValue(dataLine, "Gwarancja"));
+						item = new ElectronicsItem(name, category, price, quantity, mobile, warranty);
+						break;
+					case FOOD:
+						String dateString = reader.getValue(dataLine, "Data przydatności");
+						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+						Date expirationDate = dateFormat.parse(dateString);
+						item = new FoodItem(name, category, price, quantity, expirationDate);
+						break;
+					case MUSIC:
+						MusicGenre genre = MusicGenre.valueOf(reader.getValue(dataLine, "Gatunek muzyczny").toUpperCase());
+						boolean includesVideo = Boolean.parseBoolean(reader.getValue(dataLine, "Video"));
+						item = new MusicItem(name, category, price, quantity, genre, includesVideo);
+						break;
+					case SPORT:
+						item = new SportItem(name, category, price, quantity);
+						break;
+					default:
+						throw new IllegalStateException("Unexpected category: " + category);
+				}
 				item.setPolish(isPolish);
 				item.setSecondhand(isSecondhand);
-
 				items.add(item);
-
 			}
-
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
