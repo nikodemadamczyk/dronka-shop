@@ -1,6 +1,7 @@
 package pl.edu.agh.dronka.shop.model.provider;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,15 +86,30 @@ public class ShopProvider {
 						item = new ElectronicsItem(name, category, price, quantity, mobile, warranty);
 						break;
 					case FOOD:
-						String dateString = reader.getValue(dataLine, "Data przydatności");
-						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-						Date expirationDate = dateFormat.parse(dateString);
-						item = new FoodItem(name, category, price, quantity, expirationDate);
+						String dataString = reader.getValue(dataLine, "Data");
+						Date date = null;
+						if (dataString != null && !dataString.isEmpty()) {
+							SimpleDateFormat formatData = new SimpleDateFormat("yyyy-MM-dd");
+							try {
+								date = formatData.parse(dataString);
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+						}
+						item = new FoodItem(name, category, price, quantity, date);
 						break;
 					case MUSIC:
-						MusicGenre genre = MusicGenre.valueOf(reader.getValue(dataLine, "Gatunek muzyczny").toUpperCase());
+						String styleString = reader.getValue(dataLine, "Styl");
+						MusicGenre musicStyle = null;
+						if (styleString != null && !styleString.isEmpty()) {
+							try {
+								musicStyle = MusicGenre.valueOf(styleString.toUpperCase());
+							} catch (IllegalArgumentException e) {
+								e.printStackTrace();
+							}
+						}
 						boolean includesVideo = Boolean.parseBoolean(reader.getValue(dataLine, "Video"));
-						item = new MusicItem(name, category, price, quantity, genre, includesVideo);
+						item = new MusicItem(name, category, price, quantity, musicStyle, includesVideo);
 						break;
 					case SPORT:
 						item = new SportItem(name, category, price, quantity);

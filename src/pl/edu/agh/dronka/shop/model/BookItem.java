@@ -4,6 +4,8 @@ public class BookItem extends Item {
     private int pages;
     private boolean hardcover;
 
+    public BookItem() {
+    }
     public BookItem(String name, Category category, int price, int quantity, int pages, boolean hardcover) {
         super(name, category, price, quantity);
         this.pages = pages;

@@ -4,6 +4,8 @@ import java.util.Date;
 public class FoodItem extends Item {
     private Date expirationDate;
 
+    public FoodItem() {
+    }
     public FoodItem(String name, Category category, int price, int quantity, Date expirationDate) {
         super(name, category, price, quantity);
         this.expirationDate = expirationDate;

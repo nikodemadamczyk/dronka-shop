@@ -4,6 +4,9 @@ public class ElectronicsItem extends Item {
     private boolean mobile;
     private boolean warranty;
 
+    public ElectronicsItem() {
+    }
+
     public ElectronicsItem(String name, Category category, int price, int quantity, boolean mobile, boolean warranty) {
         super(name, category, price, quantity);
         this.mobile = mobile;

@@ -4,6 +4,8 @@ public class MusicItem extends Item {
     private MusicGenre genre;
     boolean includesVideo;
 
+    public MusicItem() {
+    }
     public MusicItem(String name, Category category, int price, int quantity, MusicGenre genre, boolean includesVideo) {
         super(name, category, price, quantity);
         this.genre = genre;
